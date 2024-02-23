@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "libralogdatabase";
+$dbname = "libralog";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 if(!$conn) {

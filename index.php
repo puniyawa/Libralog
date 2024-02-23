@@ -2,11 +2,12 @@
 include 'function/db_conn.php';
 if(isset($_GET['search'])){
     $search = strval($_GET['search']);
+    $dateToday = date("Y-m-d H:i:sa");
     if(strtolower($search) == 'true'){
         $sql = "SELECT * FROM `libralog` WHERE isReturned=1";
     }
     else if(strtolower($search) == 'false'){
-        $sql = "SELECT * FROM `libralog` WHERE isReturned=0";
+        $sql = "SELECT * FROM `libralog` WHERE isReturned=0 AND '$dateToday' < dueDate";
     }
     else if($search[0] == '#'){
         $searchID = substr($search, 1);
@@ -24,7 +25,7 @@ if(isset($_GET['filter'])){
     $filter = $_GET['filter'];
     $dateToday = date("Y-m-d H:i:sa");
     if($filter == 'late'){
-        $sql = "SELECT * FROM `libralog` WHERE '$dateToday' > dueDate";
+        $sql = "SELECT * FROM `libralog` WHERE isReturned=0 AND '$dateToday' > dueDate";
     }
 }
 if(isset($_GET['beforeDate'])){
@@ -40,11 +41,11 @@ if(isset($_GET['beforeDate'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- BOOTSTRAP -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
     <!-- FONT AWESOME -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="styles/index.css"/> 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins"/>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <title>LibraLog</title>
 </head>
 <body style="background-image: url(image/tesselate.png); font-family: 'Poppins', serif;">
@@ -61,7 +62,7 @@ if(isset($_GET['beforeDate'])){
                         <input type="search" class="form-control" name="search" placeholder="Search" required>
                         <button type="submit" class="btn btn-outline-success ms-2"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </form>
-                    <div class="dropdown">
+                    <div class="btn-group dropstart">
                         <button class="btn btn-outline-primary dropdown-toggle ms-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Filter by
                         </button>
@@ -75,30 +76,27 @@ if(isset($_GET['beforeDate'])){
                             <li>
                                 <a class="dropdown-item" href="index.php?filter=late" class="link-dark">Late</a>                                         
                             </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><input type="date" class="form-control dropdown-item" name="beforeDate"></li>
-                            <li><a class="dropdown-item" href="index.php?beforeLate=<?php echo $_POST['beforeDate'];?>" class="link-dark">Before Date</a></li>  
                         </ul>                                
                     </div>
-                    <div class="dropdown">
+                    <div class="btn-group dropstart">
                         <button class="btn btn-outline-secondary dropdown-toggle ms-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-bars"></i>
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="nav-link active p-3" href="add_user.php">Student Borrower Info</a>
+                                <a class="nav-link active p-3" href="add_user.php"><i class="fa-regular fa-user pe-2"></i>Student Borrower Info</a>
                             </li>
                             <li>
-                                <a href="form/add_user.php" class="nav-link active p-3"><button class="btn btn-outline-primary"><i class="fa-solid fa-plus"></i></button></a>
+                                <a href="form/add_user.php" class="nav-link active p-3"><i class="fa-solid fa-plus pe-2"></i>Add</a>
                             </li>
                             <li>
-                                <a href="data_table.php" class="nav-link active p-3" aria-current="page"><button class="btn btn-outline-warning"><i class="fa-solid fa-pen-to-square"></i></button></a>                             
+                                <a href="data_table.php" class="nav-link active p-3" aria-current="page"><i class="fa-solid fa-pen-to-square pe-2"></i>Edit</a>                             
                             </li>
                             <li>
-                                <a class="nav-link active p-3" href="form/add_user.php">Add Returned Book Log</a>                                        
+                                <a class="nav-link active p-3" href="form/returned.php">Add Returned Book Log</a>                                        
                             </li>
                             <li>
-                                <a class="nav-link active p-3" href="form/clearance.php">Student Library Clearance Checker</a>                                       
+                                <a class="nav-link active p-3" href="form/clearance.php"><i class="fa-solid fa-check pe-2"></i>Student Library Clearance Checker</a>                                       
                             </li>
                         </ul>                                
                     </div>
