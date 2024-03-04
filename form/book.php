@@ -2,22 +2,23 @@
 include '../function/db_conn.php';
 $selectedUser;
 $result_queryNotReturned;
+date_default_timezone_set('Asia/Taipei');
+
 if(isset($_GET['search'])){
     $search = strval($_GET['search']);
-    $sql = "SELECT * FROM `log` INNER JOIN `users` ON log.uid = users.uid WHERE log.uid='$search' OR users.studentID='$search'";
-    $sql_queryNotReturned = "SELECT * FROM `log` INNER JOIN `users` ON log.uid = users.uid  WHERE (log.uid='$search' AND isReturned='0') OR (users.studentID='$search' AND isReturned='0')";
+    $sql = "SELECT * FROM `book` INNER JOIN `log` ON book.isbn = log.isbn INNER JOIN `users` ON log.uid = users.uid WHERE log.isbn='$search';";
     $result = mysqli_query($conn, $sql);
-    $result_queryNotReturned = mysqli_query($conn, $sql_queryNotReturned);
     $selectedUser = mysqli_fetch_assoc($result);
 }    
-?>
 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Library Clearance Checker</title>
+    <title>Add Returned Book Log</title>
      <!-- BOOTSTRAP -->
      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins"/>
     <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
@@ -38,71 +39,36 @@ if(isset($_GET['search'])){
                     </div>';
                 }
             ?>
+
             <div class="col-3">
-                <?php       
-                if(isset($_GET['search'])){         
-                    if(mysqli_num_rows($result_queryNotReturned) > 0){
-                        echo 
-                        '
-                        <div class="shadow rounded mt-3" style="padding:30px; background-color: #dc3545;">
-                        <h1 class="text-light"><b>';
-                        if(isset($selectedUser)){
-                            echo $search;
-                        } 
-                        else{
-                            echo '-------';
-                        }
-                        echo '</b></h1>
-                            <h3 class="text-truncate text-light"><b>Not Yet Cleared </b></h3>
-                            <p class="text-light"> Please return these books accordingly:</p>
-                            <ul class="text-light list-unstyled">';
-                            while($row = mysqli_fetch_assoc($result_queryNotReturned)){
-                                echo '<li>'. $row['isbn'] . '</li>';
-                            }  
-                        echo 
-                            '<ul>
-                        </div> 
-                        ';
-                    }
-                    else if (isset($selectedUser)){                       
-                        echo 
-                        '
-                        <div class="shadow rounded mt-3" style="padding:30px; background-color:#198754;">
-                            <h3 class="text-truncate text-light"><b>All Okay</b></h3>
-                        </div> 
-                        ';                            
-                    }
-                }
-                ?>
+                <div class="shadow rounded mt-3 p-3" style="background-color: white; padding:30px;">
+                    <h3><b>Book Information</b></h3>               
+                </div>
                 <div class="shadow rounded mt-3 p-3" style="background-color: white; padding:30px;">
                     <?php 
                     if(isset($selectedUser)){
                     echo 
                     '
-                    <h3 class="text-truncate"><b>' . $selectedUser['lastName'] . ', </b></h3>
-                    <h3 class="text-truncate"><b>' . $selectedUser['firstName'] . ', </b></h3>
-                    <h3 class="text-truncate"><b>' . $selectedUser['middleName'] . ', </b></h3>
+                    <h3 class="text-wrap"><b>' . $selectedUser['bookName'] . ' </b></h3>
                     <p>
-                    ' . $selectedUser['dep'] . ' <br>
-                    ' . $selectedUser['gradeYear'] . ' 
-                    ' . $selectedUser['section'] . ' <br>
-                    ' . $selectedUser['sex'] . '                
+                    ' . $selectedUser['bookAuthor'] . '                
                     </p>
                     ';
                     }
                     else{
-                        echo '<h3 class="text-truncate"><b> ------- <br> UID </b></h3>';
+                        echo '<h3 class="text-wrap"><b> ------- <br> ISBN </b></h3>';
                     }
                     ?>  
 
-                    <form class="d-flex mt-3" role="search">
-                        <input type="search" class="form-control" name="search" placeholder="Search" required>
-                        <button type="submit" class="btn btn-outline-success ms-2">Search</button>
-                    </form>
-                
+                    <form role="search">
+                        <div class="d-flex mt-3">
+                            <input type="search" class="form-control" name="search" placeholder="Search" required value="<?php echo isset($uid) ? $uid : ''?>">
+                            <button type="submit" class="btn btn-outline-success ms-2">Search</button>
+                        </div>
+                    </form>   
+                                 
                 </div>
-
-
+              
             </div>
            
             <div class="col-9">
@@ -111,8 +77,6 @@ if(isset($_GET['search'])){
                             <div class="container-fluid">
                                 <a class="navbar-brand"><b>LibraLog</b></a>
                                 <div class="d-flex justify-content-start align-items-center">                                
-
-                                    
                                     <a href="../data_table.php" class="nav-link active ms-2" aria-current="page"><button class="btn btn-outline-warning">Edit Data</button></a>
                                     <a href="../index.php" class="nav-link active ms-2" aria-current="page"><button class="btn btn-outline-secondary">Home</button></a>
                                 </div>                     
@@ -126,7 +90,8 @@ if(isset($_GET['search'])){
                                 <div class="col">Grade/ Year and Section</div>   
                                 <div class="col">ISBN Number</div>  
                                 <div class="col">Due In</div>    
-                                <div class="col">Status</div>               
+                                <div class="col">Status</div>   
+                                            
                         </div>
                         <?php
                         if(isset($_GET['search'])){                                                 
@@ -174,6 +139,7 @@ if(isset($_GET['search'])){
                                         <div class="col text-truncate"> <?php echo $row['isbn']?></div>                               
                                         <div class="col text-truncate"> <?php echo $dueIn;?></div>                        
                                         <div class="col text-truncate"> <?php if($row['isReturned'] == 1){ echo 'Returned';} else{ echo $statusFromCalcDate;}?></div>          
+                
                                     </div>
                                 </a>
                                 <div class="modal fade" id="userInfo-<?php echo $row['uid']?>" tabindex="-1" aria-labelledby="userInfoLabel" aria-hidden="true">
@@ -184,17 +150,35 @@ if(isset($_GET['search'])){
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                Name: <?php echo $row['lastName'] . ', ' . $row['firstName'] . ', ' . $row['middleName'][0] . '.' ?> <br>
-                                                Student ID: <?php echo $row['studentID']?> <br>
-                                                Sex: <?php echo $row['sex']?> <br>
-                                                Grade/Year and Section : <?php echo $row['gradeYear'] . ' - ' . $row['section']?>   <br>
-                                                ISBN: <?php echo $row['isbn']?> <br>
-                                                Due In: <?php echo $dueIn?> <br>
-                                                Is Returned: <?php if($row['isReturned'] == 1){ echo 'Returned';} else{ echo $statusFromCalcDate;}?> <br> 
-                                                
-                                                Date of Borrowing: <?php echo $row['dateOfBorrowing']?> <br>
-                                                Due Date: <?php echo $row['dueDate']?> <br>
-                                                Date Returned: <?php echo $row['dateReturned']?> <br>
+                                                <form action="" method="post">
+                                                    <div class="mb-3">
+                                                        <div class="col">
+                                                            <label for="" class="form-label">Date Returned:</label>
+                                                            <input type="date" class="form-control" name="dateReturned" 
+                                                            value="<?php 
+                                                            if(date('Y-m-d',strtotime($row["dateReturned"]) != '0000-00-00'))
+                                                            {
+                                                                echo date('Y-m-d',strtotime($row["dateReturned"]));
+                                                            }
+                                                            ?>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <label>Returned?</label> &nbsp;
+                                                        <input type="radio" class="form-check-input" name="isReturned" 
+                                                        id="true" value="1" <?php echo ($row['isReturned'] == '1') ? "checked":"";?>>
+                                                        <label for="true" class="form-input-label">Yes</label>
+                                                        &nbsp;
+                                                        <input type="radio" class="form-check-input" name="isReturned" 
+                                                        id="false" value="0" <?php echo ($row['isReturned'] == '0') ? "checked":"";?>>
+                                                        <label for="false" class="form-input-label">No</label>
+                                                    </div>
+
+                                                    <div>
+                                                        <button href="returned.php?submit=update&uid=<?php echo $row['uid']?>&isReturned=<?php echo ($row['isReturned'] == '1') ? "1":"0";?>" class="btn btn-success" name="submit">Update</button>
+                                                        <a href="../index.php" class="btn btn-danger">Cancel</a>
+                                                    </div>
+                                                </form>
                                             </div>                            
                                         </div>
                                     </div>
@@ -209,5 +193,6 @@ if(isset($_GET['search'])){
            
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>

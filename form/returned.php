@@ -1,31 +1,31 @@
 <?php
 include '../function/db_conn.php';
 $selectedUser;
-$result_queryNotReturned;
+date_default_timezone_set('Asia/Taipei');
+
 if(isset($_GET['search'])){
     $search = strval($_GET['search']);
-    $sql = "SELECT * FROM `libralog` WHERE studentID='$search'";
-    $sql_queryNotReturned = "SELECT * FROM `libralog` WHERE studentID='$search' AND isReturned='0'";
+    $sql = "SELECT * FROM `log` INNER JOIN `users` ON log.uid = users.uid WHERE log.uid='$search'";
     $result = mysqli_query($conn, $sql);
-    $result_queryNotReturned = mysqli_query($conn, $sql_queryNotReturned);
     $selectedUser = mysqli_fetch_assoc($result);
+    $uid = $selectedUser['uid'];
+
+    if(isset($_GET['submit'])){        
+        $isbn = $_GET['submit'];
+        $time_curr = date("Y-m-d H:i:sa");
+        $sql = "UPDATE `log` SET `dateReturned`= CURRENT_TIMESTAMP,`isReturned`= 1 WHERE uid='$uid' AND isbn='$isbn';";
+        $result = mysqli_query($conn, $sql);
+    
+        if($result){
+            header("Location: returned.php?search=$uid");
+        }
+        else{
+            echo "Failed: " . mysqli_error($conn);
+        }
+    }
 }    
 
-date_default_timezone_set('Asia/Taipei');
-if(isset($_GET['submit'])){
-    $uid = $_GET['uid'];
-    $dateReturned = $_POST['dateReturned'];
-    $isReturned = isset($_POST['isReturned']) ? $_POST['isReturned'] : 0;
-    $sql = "UPDATE `libralog` SET `dateReturned`='$dateReturned',`isReturned`='$isReturned' WHERE uid=$uid";
-    $result = mysqli_query($conn, $sql);
 
-    if($result){
-        header("Location: ../index.php?msg=UID: ". $uid ." is Updated Successfully");
-    }
-    else{
-        echo "Failed: " . mysqli_error($conn);
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +53,11 @@ if(isset($_GET['submit'])){
                     </div>';
                 }
             ?>
+
             <div class="col-3">
+                <div class="shadow rounded mt-3 p-3" style="background-color: white; padding:30px;">
+                    <h3><b>Return Books</b></h3>               
+                </div>
                 <div class="shadow rounded mt-3 p-3" style="background-color: white; padding:30px;">
                     <?php 
                     if(isset($selectedUser)){
@@ -75,14 +79,27 @@ if(isset($_GET['submit'])){
                     }
                     ?>  
 
-                    <form class="d-flex mt-3" role="search">
-                        <input type="search" class="form-control" name="search" placeholder="Search" required>
-                        <button type="submit" class="btn btn-outline-success ms-2">Search</button>
-                    </form>
-                
+                    <form role="search">
+                        <div class="d-flex mt-3">
+                            <input type="search" class="form-control" name="search" placeholder="Search" required value="<?php echo isset($uid) ? $uid : ''?>">
+                            <button type="submit" class="btn btn-outline-success ms-2">Search</button>
+                        </div>
+                        
+                        <?php 
+                        if(isset($selectedUser)){
+                        ?>
+                        
+                        <div class="mt-3">
+                            <h4 class="p-1"><b>Scan the RFID Card to log-out the book</b></h4>                            
+                            <input type="text" class="form-control" name="submit" placeholder="ISBN" required>                                         
+                        </div>                        
+                        <?php 
+                        }
+                        ?>  
+                    </form>   
+                                 
                 </div>
-
-
+              
             </div>
            
             <div class="col-9">
@@ -189,7 +206,7 @@ if(isset($_GET['submit'])){
                                                     </div>
 
                                                     <div>
-                                                        <button href="returned.php?submit=update&uid=<?php echo $row['uid']?>" class="btn btn-success" name="submit">Update</button>
+                                                        <button href="returned.php?submit=update&uid=<?php echo $row['uid']?>&isReturned=<?php echo ($row['isReturned'] == '1') ? "1":"0";?>" class="btn btn-success" name="submit">Update</button>
                                                         <a href="../index.php" class="btn btn-danger">Cancel</a>
                                                     </div>
                                                 </form>

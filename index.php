@@ -4,34 +4,34 @@ if(isset($_GET['search'])){
     $search = strval($_GET['search']);
     $dateToday = date("Y-m-d H:i:sa");
     if(strtolower($search) == 'true'){
-        $sql = "SELECT * FROM `libralog` WHERE isReturned=1";
+        $sql = "SELECT * FROM `log` INNER JOIN `users` ON log.uid = users.uid WHERE isReturned=1";
     }
     else if(strtolower($search) == 'false'){
-        $sql = "SELECT * FROM `libralog` WHERE isReturned=0 AND '$dateToday' < dueDate";
+        $sql = "SELECT * FROM `log` INNER JOIN `users` ON log.uid = users.uid WHERE isReturned=0 AND '$dateToday' < dueDate";
     }
     else if($search[0] == '#'){
         $searchID = substr($search, 1);
-        $sql = "SELECT * FROM `libralog` WHERE uid='$searchID'";
+        $sql = "SELECT * FROM `log` INNER JOIN `users` ON log.uid = users.uid WHERE log.uid='$searchID'";
     }
     else{
-       $sql = "SELECT * FROM `libralog` WHERE concat(`uid`, `firstName`, `middleName`, `lastName`, `sex`, `studentID`, `dep`, `gradeYear`, `section`, `dateOfBorrowing`, `dueDate`, `dateReturned`, `isbn`, `isReturned`) LIKE '%$search%'"; 
+       $sql = "SELECT * FROM `log` INNER JOIN `users` ON log.uid = users.uid WHERE concat(`firstName`, `middleName`, `lastName`, `sex`, `studentID`, `dep`, `gradeYear`, `section`, `dateOfBorrowing`, `dueDate`, `dateReturned`, `isbn`, `isReturned`) LIKE '%$search%'"; 
     }
     
 }
 else{
-    $sql = "SELECT * FROM `libralog`";
+    $sql = "SELECT * FROM `log` INNER JOIN `users` ON log.uid = users.uid";
 }
 if(isset($_GET['filter'])){
     $filter = $_GET['filter'];
     $dateToday = date("Y-m-d H:i:sa");
     if($filter == 'late'){
-        $sql = "SELECT * FROM `libralog` WHERE isReturned=0 AND '$dateToday' > dueDate";
+        $sql = "SELECT * FROM `log` INNER JOIN `users` ON log.uid = users.uid WHERE isReturned=0 AND '$dateToday' > dueDate";
     }
 }
 if(isset($_GET['beforeDate'])){
     $dateToday = date("Y-m-d H:i:sa");
     $beforeDate = $_GET['date'];
-    $sql = "SELECT * FROM `libralog` WHERE '$dateToday' > dueDate";
+    $sql = "SELECT * FROM `log` INNER JOIN `users` ON log.uid = users.uid WHERE '$dateToday' > dueDate";
 
 }
 ?>
@@ -51,7 +51,7 @@ if(isset($_GET['beforeDate'])){
 <body style="background-image: url(image/tesselate.png); font-family: 'Poppins', serif;">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <i class="fa-solid fa-book fa-2xl" style="color: #066634; padding-right: 20px; padding-left: 10px;"></i>
+            <a href="index.php"><i class="fa-solid fa-book fa-2xl" style="color: #066634; padding-right: 20px; padding-left: 10px;"></i></a>
             <h1 style="padding-right: 30px; padding-top: 5px; color: #066634;"><b>LibraLog</b></h1>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -83,20 +83,27 @@ if(isset($_GET['beforeDate'])){
                             <i class="fa-solid fa-bars"></i>
                         </button>
                         <ul class="dropdown-menu">
-                            <li>
-                                <a class="nav-link active p-3" href="add_user.php"><i class="fa-regular fa-user pe-2"></i>Student Borrower Info</a>
-                            </li>
+
                             <li>
                                 <a href="form/add_user.php" class="nav-link active p-3"><i class="fa-solid fa-plus pe-2"></i>Add</a>
                             </li>
                             <li>
+                                <a class="nav-link active p-3" href="form/returned.php"><i class="fa-solid fa-right-from-bracket pe-2"></i>Add Returned Book Log</a>                                        
+                            </li>
+                            <li>
                                 <a href="data_table.php" class="nav-link active p-3" aria-current="page"><i class="fa-solid fa-pen-to-square pe-2"></i>Edit</a>                             
                             </li>
-                            <li>
-                                <a class="nav-link active p-3" href="form/returned.php">Add Returned Book Log</a>                                        
-                            </li>
+                           
+                            <li><hr class="dropdown-divider"></li>
                             <li>
                                 <a class="nav-link active p-3" href="form/clearance.php"><i class="fa-solid fa-check pe-2"></i>Student Library Clearance Checker</a>                                       
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="nav-link active p-3" href="form/user_info.php"><i class="fa-regular fa-user pe-2"></i>Student Borrower Info</a>
+                            </li>
+                            <li>
+                                <a class="nav-link active p-3" href="form/book.php"><i class="fa-solid fa-book pe-2"></i>View Book Info</a>                                       
                             </li>
                         </ul>                                
                     </div>
@@ -135,9 +142,6 @@ if(isset($_GET['beforeDate'])){
             </div> -->
             <div class="col">
                 <div style="background-color: white;" class="shadow rounded p-3 m-5 mt-5">
-                    <nav class="navbar">
-
-                    </nav>
                     <div class="row shadow-sm border-none rounded p-3 m-2 color-danger">                       
                             <div class="col-1">UID</div>
                             <div class="col">Name</div>
