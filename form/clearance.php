@@ -25,9 +25,9 @@ if(isset($_GET['search'])){
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
-<body style="font-family: poppins; min-width: 1080px;">
-    <div class="container-fluid">   
-        <div class="row">
+<body style="background-image: url(../image/LibraLogL.jpg); background-size: 1440px; min-width: 1024px; font-family: 'Poppins', serif;">    
+<div class="container-fluid">   
+        <div class="row g-3">
             <?php
                 if(isset($_GET['msg'])){
                     $msg = $_GET['msg'];
@@ -39,86 +39,91 @@ if(isset($_GET['search'])){
                 }
             ?>
             <div class="col-3">
-                <?php       
-                if(isset($_GET['search'])){         
-                    if(mysqli_num_rows($result_queryNotReturned) > 0){
-                        echo 
-                        '
-                        <div class="shadow rounded mt-3" style="padding:30px; background-color: #dc3545;">
-                        <h1 class="text-light"><b>';
-                        if(isset($selectedUser)){
-                            echo $search;
-                        } 
-                        else{
-                            echo '-------';
+                <div class="rounded p-3 mt-3" style="background-color: rgba(255,255,255,0.85); backdrop-filter: blur(6px);">
+                    <?php       
+                    if(isset($_GET['search'])){         
+                        if(mysqli_num_rows($result_queryNotReturned) > 0){
+                            echo 
+                            '
+                            <div class="shadow rounded mb-3" style="padding:30px; background-color: #dc3545;">
+                                <h1 class="text-light text-truncate">
+                                    <b>';
+                                    if(isset($selectedUser)){
+                                        echo $search;
+                                    } 
+                                    else{
+                                        echo '-------';
+                                    }
+                                    echo '
+                                    </b>
+                                </h1>
+                                <h3 class="text-wrap text-light"><b>Not Yet Cleared </b></h3>
+                                <p class="text-light"> Please return these books accordingly:</p>
+                                <ul class="text-light list-unstyled">';
+                                while($row = mysqli_fetch_assoc($result_queryNotReturned)){
+                                    echo '<li>'. $row['isbn'] . '</li>';
+                                }  
+                                echo 
+                                '<ul>
+                            </div> 
+                            ';
                         }
-                        echo '</b></h1>
-                            <h3 class="text-truncate text-light"><b>Not Yet Cleared </b></h3>
-                            <p class="text-light"> Please return these books accordingly:</p>
-                            <ul class="text-light list-unstyled">';
-                            while($row = mysqli_fetch_assoc($result_queryNotReturned)){
-                                echo '<li>'. $row['isbn'] . '</li>';
-                            }  
-                        echo 
-                            '<ul>
-                        </div> 
-                        ';
+                        else if (isset($selectedUser)){                       
+                            echo 
+                            '
+                            <div class="shadow rounded mb-3" style="padding:30px; background-color:#198754;">
+                                <h3 class="text-wrap text-light"><b>All Okay</b></h3>
+                            </div> 
+                            ';                            
+                        }
                     }
-                    else if (isset($selectedUser)){                       
+                    ?>
+                    <div class="shadow rounded" style="background-color: white; padding:20px;">
+                        <?php 
+                        if(isset($selectedUser)){
                         echo 
                         '
-                        <div class="shadow rounded mt-3" style="padding:30px; background-color:#198754;">
-                            <h3 class="text-truncate text-light"><b>All Okay</b></h3>
-                        </div> 
-                        ';                            
-                    }
-                }
-                ?>
-                <div class="shadow rounded mt-3 p-3" style="background-color: white; padding:30px;">
-                    <?php 
-                    if(isset($selectedUser)){
-                    echo 
-                    '
-                    <h3 class="text-truncate"><b>' . $selectedUser['lastName'] . ', </b></h3>
-                    <h3 class="text-truncate"><b>' . $selectedUser['firstName'] . ', </b></h3>
-                    <h3 class="text-truncate"><b>' . $selectedUser['middleName'] . ', </b></h3>
-                    <p>
-                    ' . $selectedUser['dep'] . ' <br>
-                    ' . $selectedUser['gradeYear'] . ' 
-                    ' . $selectedUser['section'] . ' <br>
-                    ' . $selectedUser['sex'] . '                
-                    </p>
-                    ';
-                    }
-                    else{
-                        echo '<h3 class="text-truncate"><b> ------- <br> UID </b></h3>';
-                    }
-                    ?>  
+                        <h3 class="text-truncate"><b>' . $selectedUser['lastName'] . ', </b></h3>
+                        <h3 class="text-truncate"><b>' . $selectedUser['firstName'] . ', </b></h3>
+                        <h3 class="text-truncate"><b>' . $selectedUser['middleName'] . ', </b></h3>
+                        <p>
+                        ' . $selectedUser['dep'] . ' <br>
+                        ' . $selectedUser['gradeYear'] . ' 
+                        ' . $selectedUser['section'] . ' <br>
+                        ' . $selectedUser['sex'] . '                
+                        </p>
+                        ';
+                        }
+                        else{
+                            echo '<h3 class="text-truncate"><b> ------- <br> UID </b></h3>';
+                        }
+                        ?>  
 
-                    <form class="d-flex mt-3" role="search">
-                        <input type="search" class="form-control" name="search" placeholder="Search" required>
-                        <button type="submit" class="btn btn-outline-success ms-2">Search</button>
-                    </form>
-                
+                        <form class="d-flex mt-3" role="search">
+                            <input type="search" class="form-control" name="search" placeholder="Search" required>
+                            <button type="submit" class="btn btn-outline-success ms-2">Search</button>
+                        </form>
+                    
+                    </div>
+
+
                 </div>
-
-
             </div>
            
             <div class="col-9">
                 <div class="shadow rounded mt-3" style="padding:30px; min-height: 96vh; background-color: white;">
                         <nav class="navbar">
                             <div class="container-fluid">
-                                <a class="navbar-brand"><b>LibraLog</b></a>
+                                <a class="navbar-brand"><b>LibraLog Clearance Checker</b></a>
                                 <div class="d-flex justify-content-start align-items-center">                                
 
                                     
-                                    <a href="../data_table.php" class="nav-link active ms-2" aria-current="page"><button class="btn btn-outline-warning">Edit Data</button></a>
-                                    <a href="../index.php" class="nav-link active ms-2" aria-current="page"><button class="btn btn-outline-secondary">Home</button></a>
+                                <a href="../data_table.php" class="nav-link active ms-2" aria-current="page"><button class="btn btn-outline-warning"><i class="fa-solid fa-pen-to-square"></i></button></a>
+                                    <a href="../index.php" class="nav-link active ms-2" aria-current="page"><button class="btn btn-outline-secondary"><i class="fa-solid fa-house"></i></button></a>
                                 </div>                     
                             </div>
                         </nav>
-                        <div class="row shadow-sm border-none rounded p-3 m-2 color-danger">                       
+                        <div class="row shadow-sm border-none rounded p-3 m-2 color-danger" style="background-color:white;">                       
                                 <div class="col-1">UID</div>
                                 <div class="col">Name</div>
                                 <div class="col">Student ID</div>

@@ -48,25 +48,22 @@ if(isset($_GET['beforeDate'])){
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <title>LibraLog</title>
 </head>
-<body style="background-image: url(image/tesselate.png); font-family: 'Poppins', serif;">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+<body style="background-image: url(image/LibraLogL.jpg); background-size: 1440px; min-width: 1024px; font-family: 'Poppins', serif;">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
         <div class="container-fluid">
-            <a href="index.php"><i class="fa-solid fa-book fa-2xl" style="color: #066634; padding-right: 20px; padding-left: 10px;"></i></a>
-            <h1 style="padding-right: 30px; padding-top: 5px; color: #066634;"><b>LibraLog</b></h1>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" style="padding-right: 10px;" id="navbarNavDropdown">
-                <div class="d-flex  align-items-center">
+            <a class="navbar-brand" href="index.php"><h1 style="color: #3C573A;"><i class="fa-solid fa-book fa" style="color: #3C573A; padding-right: 20px; padding-left: 10px;"></i><b>LibraLog</b></h1></a>
+            
+            <div class="justify-content-end" style="padding-right: 10px;" id="navbarNavDropdown">
+                <div class="d-flex align-items-center">
                     <form class="d-flex" role="search">
                         <input type="search" class="form-control" name="search" placeholder="Search" required>
-                        <button type="submit" class="btn btn-outline-success ms-2"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <button type="submit" class="btn btn-outline-secondary ms-2"> <i class="fa-solid fa-magnifying-glass"></i></button>
                     </form>
                     <div class="btn-group dropstart">
-                        <button class="btn btn-outline-primary dropdown-toggle ms-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Filter by
+                        <button class="btn btn-outline-secondary dropdown-toggle ms-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-filter"></i>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu" >
                             <li>
                                 <a class="dropdown-item" href="index.php?search=true" class="link-dark">Returned</a>
                             </li>
@@ -82,8 +79,7 @@ if(isset($_GET['beforeDate'])){
                         <button class="btn btn-outline-secondary dropdown-toggle ms-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-bars"></i>
                         </button>
-                        <ul class="dropdown-menu">
-
+                        <ul class="dropdown-menu" style="min-width:200px;">
                             <li>
                                 <a href="form/add_user.php" class="nav-link active p-3"><i class="fa-solid fa-plus pe-2"></i>Add</a>
                             </li>
@@ -141,7 +137,7 @@ if(isset($_GET['beforeDate'])){
                 </div>
             </div> -->
             <div class="col">
-                <div style="background-color: white;" class="shadow rounded p-3 m-5 mt-5">
+                <div class="shadow-lg rounded p-3 m-5 mt-5" style="background-color: white;">
                     <div class="row shadow-sm border-none rounded p-3 m-2 color-danger">                       
                             <div class="col-1">UID</div>
                             <div class="col">Name</div>
@@ -154,9 +150,6 @@ if(isset($_GET['beforeDate'])){
                     </div>
                     <?php                                                 
                     $result = mysqli_query($conn, $sql);
-
-
-
                     while($row = mysqli_fetch_assoc($result)){
                             // Calculate the Status
                             $origin = date_create(date('Y-m-d H:i:s'));

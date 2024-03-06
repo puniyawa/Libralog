@@ -40,7 +40,7 @@ if(isset($_POST['submit'])){
 
     <title>LibraLog User Form</title>
 </head>
-<body style="font-family: poppins; min-width: 1080px;">
+<body style="background-image: url(../image/LibraLogL.jpg); background-size: 1440px; min-width: 1024px; font-family: 'Poppins', serif;">
     <div style="padding:50px;"> 
         <div class="container">
             <div class="text-center mb-4">

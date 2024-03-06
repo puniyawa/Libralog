@@ -26,9 +26,9 @@ if(isset($_GET['search'])){
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
-<body style="font-family: poppins; min-width: 1080px;">
+<body style="background-image: url(../image/LibraLogL.jpg); background-size: 1440px; min-width: 1024px; font-family: 'Poppins', serif;">
     <div class="container-fluid">   
-        <div class="row">
+        <div class="row g-3">
             <?php
                 if(isset($_GET['msg'])){
                     $msg = $_GET['msg'];
@@ -41,49 +41,51 @@ if(isset($_GET['search'])){
             ?>
 
             <div class="col-3">
-                <div class="shadow rounded mt-3 p-3" style="background-color: white; padding:30px;">
-                    <h3><b>User Information</b></h3>               
-                </div>
-                <div class="shadow rounded mt-3 p-3" style="background-color: white; padding:30px;">
-                    <?php 
-                    if(isset($selectedUser)){
-                        echo 
-                        '
-                        <h3 class="text-truncate"><b>' . $selectedUser['lastName'] . ', </b></h3>
-                        <h3 class="text-truncate"><b>' . $selectedUser['firstName'] . ', </b></h3>
-                        <h3 class="text-truncate"><b>' . $selectedUser['middleName'] . ', </b></h3>
-                        <p>
-                        ' . $selectedUser['dep'] . ' <br>
-                        ' . $selectedUser['gradeYear'] . ' 
-                        ' . $selectedUser['section'] . ' <br>
-                        ' . $selectedUser['sex'] . '                
-                        </p>
-                        ';
-                    }
-                    else{
-                        echo '<h3 class="text-wrap"><b> ------- <br> UID </b></h3>';
-                    }
-                    ?>  
+                <div class="rounded p-3 mt-3" style="background-color: rgba(255,255,255,0.85); backdrop-filter: blur(6px);">
+                    <div class="shadow rounded p-3" style="background-color: white; padding:30px;">
+                        <?php 
+                        if(isset($selectedUser)){
+                            echo 
+                            '
+                            <h3 class="text-truncate"><b>' . $selectedUser['lastName'] . ', </b></h3>
+                            <h3 class="text-truncate"><b>' . $selectedUser['firstName'] . ', </b></h3>
+                            <h3 class="text-truncate"><b>' . $selectedUser['middleName'] . ', </b></h3>
+                            <p>
+                            ' . $selectedUser['dep'] . ' <br>
+                            ' . $selectedUser['gradeYear'] . ' 
+                            ' . $selectedUser['section'] . ' <br>
+                            ' . $selectedUser['sex'] . '                
+                            </p>
+                            ';
+                        }
+                        else{
+                            echo '<h3 class="text-wrap"><b> ------- <br> UID </b></h3>';
+                        }
+                        ?>  
 
-                    <form role="search">
-                        <div class="d-flex mt-3">
-                            <input type="search" class="form-control" name="search" placeholder="Search" required value="<?php echo isset($uid) ? $uid : ''?>">
-                            <button type="submit" class="btn btn-outline-success ms-2">Search</button>
-                        </div>
-                    </form>   
-                                 
-                </div>
-              
+                        
+                                    
+                    </div>
+                    <div class="rounded p-3 mt-3" style="background-color: white;">
+                        <form role="search">
+                            <label for="" class="form-label"><b>Search User ID</b></label>
+                            <div class="d-flex ">
+                                <input type="search" class="form-control" name="search" placeholder="Search" required value="<?php echo isset($uid) ? $uid : ''?>">
+                                <button type="submit" class="btn btn-outline-success ms-2">Search</button>
+                            </div>
+                        </form>   
+                    </div>
+                </div>  
             </div>
            
             <div class="col-9">
                 <div class="shadow rounded mt-3" style="padding:30px; min-height: 96vh; background-color: white;">
                         <nav class="navbar">
                             <div class="container-fluid">
-                                <a class="navbar-brand"><b>LibraLog</b></a>
+                                <a class="navbar-brand"><b>User Information</b></a>
                                 <div class="d-flex justify-content-start align-items-center">                                
-                                    <a href="../data_table.php" class="nav-link active ms-2" aria-current="page"><button class="btn btn-outline-warning">Edit Data</button></a>
-                                    <a href="../index.php" class="nav-link active ms-2" aria-current="page"><button class="btn btn-outline-secondary">Home</button></a>
+                                <a href="../data_table.php" class="nav-link active ms-2" aria-current="page"><button class="btn btn-outline-warning"><i class="fa-solid fa-pen-to-square"></i></button></a>
+                                    <a href="../index.php" class="nav-link active ms-2" aria-current="page"><button class="btn btn-outline-secondary"><i class="fa-solid fa-house"></i></button></a>
                                 </div>                     
                             </div>
                         </nav>

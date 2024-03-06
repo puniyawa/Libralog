@@ -94,12 +94,12 @@ if(isset($_POST['submit'])){
 
     <title>LibraLog User Form</title>
 </head>
-<body style="font-family: poppins; background-image: url(../image/tesselate.png);">
+<body style="background-image: url(../image/LibraLogL.jpg); background-size: 1440px; min-width: 1024px; font-family: 'Poppins', serif;">
     <div style="padding:50px;"> 
         <div class="container d-flex justify-content-center">
-            <div class="card p-5 shadow rounded">
+            <div class="card p-5 shadow-lg rounded">
                 <div class="text-center mb-4">
-                    <h3>Add New</h3>
+                    <h1><b>Add New</b> </h1>
                     <p class="text-muted">Fill out the form to Borrow a Book</p>
                 </div>
                 <?php
@@ -111,7 +111,7 @@ if(isset($_POST['submit'])){
                     <div class="mb-3">
                         <div class="col">
                             <label for="" class="form-label">UID:</label>
-                            <input type="text" class="form-control" name="uid" required value="<?php echo $uid?>">
+                            <input type="text" class="form-control" name="uid" required value="<?php echo $uid?>" placeholder="Click me then scan the RFID">
                             <div class="invalid-feedback">Enter your UID</div>
                         </div>
                     </div>
@@ -209,7 +209,7 @@ if(isset($_POST['submit'])){
                     <div class="mb-3">
                         <div class="col">
                             <label for="" class="form-label">ISBN Number:</label >
-                            <input type="text" class="form-control" name="isbn" required value="">
+                            <input type="text" class="form-control" name="isbn" required value="" placeholder="Click me then scan the RFID">
                             <div class="invalid-feedback">Provide the ISBN number of the book that you'll borrow</div>
                         </div>
                     </div>
