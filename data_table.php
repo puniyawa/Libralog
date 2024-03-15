@@ -179,44 +179,12 @@ if(isset($_GET['beforeDate'])){
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                ...
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" href="form/edit.php?uid=<?php echo $row['uid'] ?>" class="link-dark">
-                                                        Edit
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" class="link-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                        Delete
-                                                    </a>                                         
-                                                </li>
-                                            </ul>
-                                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            This change is <b>permanent and irreversible.</b>
-                                                            <br>
-                                                            Selected UID: <?php echo $row['uid']?>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <a href="function/delete.php?uid=<?php echo $row['uid']?>" class="link-dark">
-                                                                <button type="button" class="btn btn-danger"> Delete Permanently</button>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>    
-                                        </div>
+                                        <a class="btn btn-outline-secondary" href="form/edit.php?uid=<?php echo $row['uid']?>&logID=<?php echo $row['logID']?>" class="link-dark">
+                                            Edit
+                                        </a>
+                                        <a class="btn btn-outline-danger" class="link-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            Delete
+                                        </a>                                         
                                     </div>                            
                                 </div>
                             </div>
